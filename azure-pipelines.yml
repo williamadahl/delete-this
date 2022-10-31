@@ -21,19 +21,20 @@ steps:
     ng build
   displayName: 'npm install and build '
 - task: CopyFiles@2
+  displayName: 'Copy dist to artifacts'
   inputs:
-    SourceFolder: '$(Build.Repository.LocalPath)/target'
+    SourceFolder: '$(Build.Repository.LocalPath)/dist'
     Contents: '**'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/dist'
     CleanTargetFolder: true
     OverWrite: true
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
 
 
 - task: PublishBuildArtifacts@1
+  displayName: 'Publish artifacts'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'SpringFramework_fullsources'
-    publishLocation: 'Container'
+    ArtifactName: '$(artifactName)'
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
 
